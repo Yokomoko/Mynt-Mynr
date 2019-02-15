@@ -1,0 +1,198 @@
+﻿<Window x:Class="Mynt_Mynr.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Mynt_Mynr"
+        mc:Ignorable="d" WindowStyle="None" BorderThickness="1" AllowsTransparency="True"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        TextElement.Foreground="{DynamicResource SecondaryAccentBrush}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13" BorderBrush="{DynamicResource PrimaryHueMidBrush}"
+        TextOptions.TextFormattingMode="Ideal" 
+        TextOptions.TextRenderingMode="Auto"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        FontFamily="{DynamicResource MaterialDesignFont}"
+        Icon="/Resources/GRS-logo.ico"
+        Title="MYNR v0.2.4" Height="450" Width="580" SizeToContent="Height"  Closing="Window_Closing">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+                <ResourceDictionary Source="Resources/Style.xaml"></ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Window.Background>
+        <ImageBrush/>
+    </Window.Background>
+    <Grid Margin="0">
+        <Grid.Background>
+            <ImageBrush ImageSource="minerbg.png" Stretch="UniformToFill"/>
+        </Grid.Background>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25px"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Rectangle x:Name="LogoMynter" HorizontalAlignment="Left" Height="169" VerticalAlignment="Top" Width="578" Margin="0,14,0,0" Grid.RowSpan="2">
+            <Rectangle.Fill>
+                <ImageBrush ImageSource="miner-logo.png" Stretch="Uniform"/>
+            </Rectangle.Fill>
+        </Rectangle>
+        <Grid Margin="5,10,5,10" Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="85px"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0" VerticalAlignment="Top" MouseLeftButtonDown="UIElement_OnMouseLeftButtonDown">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+            </Grid>
+            <Expander Grid.Row="1" x:Name="UxStandardSettings" Margin="0 10 0 0" IsExpanded="True" HorizontalAlignment="Stretch" VerticalAlignment="Top" Background="{x:Null}" Style="{DynamicResource MaterialDesignExpander}" Expanded="UxStandardSettings_OnExpanded">
+                <Expander.Header>
+                    <Label Style="{DynamicResource LabelLight}" Margin="0" Padding="0">Standard Settings</Label>
+                </Expander.Header>
+                <StackPanel>
+                    <GroupBox Grid.Row="0" x:Name="uxMiningPoolGroup"  Style="{DynamicResource MaterialDesignGroupBox}" Header="Mining Pool">
+                        <StackPanel HorizontalAlignment="Stretch">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <ComboBox x:Name="uxPoolSelectorDdl" SelectedIndex="0" Width="175" SelectionChanged="UxPoolSelectorDdl_OnSelectionChanged" Style="{DynamicResource MaterialDesignComboBox}">
+                                    <ComboBoxItem Background="White" Content="Pool 1"/>
+                                    <ComboBoxItem Background="White" Content="Pool 2"/>
+                                    <!-- <ComboBoxItem Background="{DynamicResource MedColour}">MiningPoolHub</ComboBoxItem>
+                                            <ComboBoxItem Background="{DynamicResource MedColour}">P2Pool</ComboBoxItem>-->
+                                    <ComboBoxItem Background="White" Content="Custom"/>
+                                </ComboBox>
+                            </Grid>
+                            <WrapPanel x:Name="WpCustom1">
+                                <TextBox Width="455" x:Name="TxtPool"  TextChanged="TxtPool_OnTextChanged" materialDesign:HintAssist.Hint="Pool Address" Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+                            </WrapPanel>
+                            <WrapPanel x:Name="WpCustom2">
+                                <TextBox Width="293" x:Name="TxtUsername" Text="MVT2AJDK7CYTtWo5fX9u48eQT5ynWPyFFd" materialDesign:HintAssist.Hint="Wallet Address" Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+                                <TextBox Width="80" x:Name="TxtPassword"  Text="x" materialDesign:HintAssist.Hint="Password" Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+                            </WrapPanel>
+                        </StackPanel>
+                    </GroupBox>
+                    <GroupBox Style="{DynamicResource MaterialDesignCardGroupBox}" Header="Hardware">
+                        <StackPanel HorizontalAlignment="Stretch" Height="Auto">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="70"/>
+                                    <ColumnDefinition Width="90"/>
+                                    <ColumnDefinition Width="80"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <CheckBox Grid.RowSpan="2" x:Name="UxCpuTgl" Height="50px" Width="70px" HorizontalAlignment="Left" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" ToolTip="CPU Mining" Style="{DynamicResource MaterialDesignCheckBox}">
+                                    <Rectangle Fill="{DynamicResource CpuLogo}" Width="48" Height="48"/>
+                                </CheckBox>
+                                <CheckBox x:Name="uxnVidiaRb" Grid.Column="2" Grid.Row="0" Height="50px" Width="76px" ToolTip="nVidia Mining" Checked="UxnVidiaRb_OnChecked" Style="{DynamicResource MaterialDesignCheckBox}" HorizontalAlignment="Right">
+                                    <Rectangle Fill="{DynamicResource NVidiaLogo}" Width="48" Height="40"/>
+                                </CheckBox>
+                                <CheckBox x:Name="uxnAMDRb" Padding="0,2,0,0" Grid.Column="3" Grid.Row="0" Width="60px" Height="50px" ToolTip="AMD Mining" Checked="UxAmdRb_OnChecked" Style="{DynamicResource MaterialDesignCheckBox}" HorizontalAlignment="Right" Unchecked="UxnAMDRb_OnUnchecked">
+                                    <Rectangle Fill="{DynamicResource AmdLogo}" Width="40" Height="40"/>
+                                </CheckBox>
+                                <DockPanel Grid.Column="4" HorizontalAlignment="Right" Margin="0">
+                                    <Label Style="{DynamicResource LabelLight}" HorizontalAlignment="Right" VerticalAlignment="Center" x:Name="GpuIntensityLbl" Content="Intensity:"/>
+                                    <Slider Orientation="Horizontal" x:Name="uxIntervalSlider" VerticalContentAlignment="Center" IsSnapToTickEnabled="True"  Width="90" Maximum="24" Minimum="8" ValueChanged="RangeBase_OnValueChanged" SmallChange="0"  VerticalAlignment="Center" Style="{DynamicResource SliderStyle}"/>
+                                    <TextBox Width="20" MaxLength="2" BorderThickness="0" IsReadOnly="True" Margin="0,0,0,0" TextAlignment="Center" VerticalAlignment="Center" PreviewTextInput="UxIntensityTxt_OnPreviewTextInput" x:Name="UxIntensityTxt" Height="25"  Text="19"/>
+                                    <CheckBox x:Name="uxAutoIntensityChk" Style="{DynamicResource MaterialDesignCheckBox}" Checked="UxAutoIntensityChk_OnChecked" Unchecked="UxAutoIntensityChk_OnUnchecked" FlowDirection="RightToLeft">
+                                        <Label Style="{DynamicResource LabelLight}" HorizontalAlignment="Right" VerticalAlignment="Center" Content="Auto"/>
+                                    </CheckBox>
+                                    <Image x:Name="UxIntensityHelp" HorizontalAlignment="Right" VerticalAlignment="Center" Source="{StaticResource HelpIcon}" Margin="2,0,0,0"  Width="16" Height="16" MouseEnter="UxIntensityHelp_OnMouseEnter" MouseLeave="UxIntensityHelp_OnMouseLeave"/>
+                                    <Popup x:Name="UxIntensityPopup" Opacity="20" Placement="Right" VerticalOffset="-1" HorizontalOffset="-5" Height="Auto" AllowsTransparency="True" Margin="10,0,0,0" PlacementTarget="{Binding ElementName=UxIntensityHelp}" IsOpen="False" MouseEnter="UxIntensityHelp_OnMouseEnter" MouseLeave="UxIntensityHelp_OnMouseLeave">
+                                        <Border BorderThickness="1" CornerRadius="0" Margin="10,0,0,0"  Background="{StaticResource DarkColor}">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition/>
+                                                    <ColumnDefinition/>
+                                                </Grid.ColumnDefinitions>
+                                                <Image Source="{StaticResource InformationIcon}" Grid.Column="0" Height="19.5" Margin="-2,-2,0,-2" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                                                <TextBlock x:Name="UxIntensityPopupText" TextWrapping="Wrap" Grid.Column="1" Height="Auto" Background="Transparent"  Padding="5,2,5,2"/>
+                                            </Grid>
+                                        </Border>
+                                    </Popup>
+                                </DockPanel>
+                            </Grid>
+                        </StackPanel>
+                    </GroupBox>
+                </StackPanel>
+
+            </Expander>
+            <Expander Padding="5,0,0,0" x:Name="UxAdvancedSettings" IsExpanded="False" Grid.Row="2"  HorizontalAlignment="Stretch" VerticalAlignment="Top"  Style="{DynamicResource MaterialDesignExpander}" Expanded="UxAdvancedSettings_OnExpanded" Background="{x:Null}" Foreground="#FF9C3F9A">
+                <Expander.Header>
+                    <Label Style="{DynamicResource LabelLight}" Margin="0" Padding="0">Donations</Label>
+                </Expander.Header>
+                <ScrollViewer HorizontalAlignment="Stretch" MaxHeight="400" VerticalScrollBarVisibility="Auto">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <GroupBox Grid.Row="1" x:Name="uxDonationsGroup"  Style="{DynamicResource MaterialDesignGroupBox}" Header="Donations (Optional - No Donations are Taken)">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <WrapPanel>
+                                    <TextBox Width="426" IsReadOnly="True" Text="MVT2AJDK7CYTtWo5fX9u48eQT5ynWPyFFd" materialDesign:HintAssist.Hint="Dev Fund" Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+                                </WrapPanel>
+                                <WrapPanel Grid.Row="1">
+                                    <TextBox Width="426" IsReadOnly="True" Text="MMQZ4YtLs46TpK6bJ8UvKehUAiBuhd9ZuF" materialDesign:HintAssist.Hint="DreadedZombie" Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+                                </WrapPanel>
+                            </Grid>
+                        </GroupBox>
+                    </Grid>
+                </ScrollViewer>
+            </Expander>
+            <Expander Padding="5,0,0,0" x:Name="UxLogsExpander"  Style="{DynamicResource MaterialDesignExpander}" IsExpanded="False" Grid.Row="4"  HorizontalAlignment="Stretch" VerticalAlignment="Top" Expanded="UxLogsExpander_OnExpanded" Visibility="Collapsed" Background="Transparent">
+                <Expander.Header>
+                    <Label Style="{DynamicResource LabelLight}" Content="Logs"/>
+                </Expander.Header>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <GroupBox Grid.Row="0" x:Name="uxCpuMiningLogGroup" Visibility="Collapsed" Style="{DynamicResource MaterialDesignGroupBox}" Header="CPU Mining Log">
+                        <StackPanel Orientation="Vertical">
+                            <ScrollViewer Height="65" x:Name="uxCpuScroller">
+                                <TextBlock TextWrapping="Wrap" x:Name="uxCpuLog" MouseRightButtonDown="UxCpuLog_OnMouseRightButtonDown"/>
+                            </ScrollViewer>
+                        </StackPanel>
+                    </GroupBox>
+                    <GroupBox Grid.Row="1" x:Name="uxGpuMiningLog" Visibility="Collapsed"  Style="{DynamicResource MaterialDesignGroupBox}" Header="GPU Mining Log">
+                        <StackPanel Orientation="Vertical">
+                            <ScrollViewer Height="65" x:Name="uxGpuScroller">
+                                <TextBlock TextWrapping="Wrap" x:Name="uxGpuLog" MouseRightButtonDown="UxGpuLog_OnMouseRightButtonDown"/>
+                            </ScrollViewer>
+                        </StackPanel>
+                    </GroupBox>
+                </Grid>
+            </Expander>
+            <ProgressBar Grid.Row="5" x:Name="ProgressBar" Margin="10,5,10,5" Visibility="Collapsed"/>
+            <StackPanel Grid.Row="6" VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Horizontal" Margin="0,10,0,0">
+                <Button x:Name="BtnStart" Click="BtnStart_OnClick" Foreground="{StaticResource DarkColor}" Content="Start Mining" Background="{StaticResource PrimaryHueMidBrush}">
+                </Button>
+            </StackPanel>
+        </Grid>
+        <local:Titlebar x:Name="Titlebar" BorderThickness="0" IsMainWindow="True"/>
+    </Grid>
+</Window>

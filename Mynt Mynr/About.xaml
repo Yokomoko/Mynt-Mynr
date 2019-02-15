@@ -1,0 +1,86 @@
+﻿<Window x:Class="Mynt_Mynr.About"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Mynt_Mynr"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}" BorderThickness="1" BorderBrush="Black" AllowsTransparency="True"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        ShowInTaskbar="False"
+        TextOptions.TextFormattingMode="Ideal" 
+        TextOptions.TextRenderingMode="Auto"      
+        ResizeMode="NoResize"
+        WindowStyle="None"
+        FontFamily="{DynamicResource MaterialDesignFont}" 
+        Icon="/Resources/GRS-logo.ico"
+        Title="About" Height="300" Width="350" WindowStartupLocation="CenterScreen" MouseLeftButtonDown="About_OnMouseLeftButtonDown">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Window.Background>
+        <ImageBrush ImageSource="minerbg.png" Stretch="UniformToFill"/>
+    </Window.Background>
+    <Grid Margin="0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25px"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <local:Titlebar BorderThickness="0" IsMainWindow="False" IsAbout="True"></local:Titlebar>
+        <Rectangle HorizontalAlignment="Left" Height="99.147" Grid.Row="1" VerticalAlignment="Top" Width="348">
+            <Rectangle.Fill>
+                <ImageBrush ImageSource="miner-logo.png" Stretch="Uniform"/>
+            </Rectangle.Fill>
+        </Rectangle>
+        <Grid Margin="5,73.234,5,-53.234" Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Label Grid.Row="1" Style="{StaticResource LabelLight}" FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Right">Website:</Label>
+            <Label Grid.Row="2" Style="{StaticResource LabelLight}" FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Right">Facebook:</Label>
+            <Label Grid.Row="3" Style="{StaticResource LabelLight}" FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Right">Twitter:</Label>
+            <Label Grid.Row="4" Style="{StaticResource LabelLight}" FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Right">Reddit:</Label>
+            <Label Grid.Row="5" Style="{StaticResource LabelLight}" FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Right">Discord:</Label>
+            <Label Grid.Row="6" Style="{StaticResource LabelLight}" FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Right">Github:</Label>
+            <Label Grid.Row="7" Style="{StaticResource LabelLight}" FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Right">Developer:</Label>
+            <Label Grid.Row="8" Style="{StaticResource LabelLight}" FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Right">Donate:</Label>
+            <TextBlock Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" >
+                <Hyperlink NavigateUri="https://www.myntcurrency.org"  RequestNavigate="Hyperlink_OnRequestNavigate">https://www.myntcurrency.org</Hyperlink>
+            </TextBlock>
+            <TextBlock Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" >
+                <Hyperlink NavigateUri="https://www.facebook.com"  RequestNavigate="Hyperlink_OnRequestNavigate">Coming soon...</Hyperlink>
+            </TextBlock>
+            <TextBlock Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" >
+                <Hyperlink NavigateUri="https://twitter.com/myntcurrency"  RequestNavigate="Hyperlink_OnRequestNavigate">https://twitter.com/myntcurrency</Hyperlink>
+            </TextBlock>
+            <TextBlock Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" >
+                <Hyperlink NavigateUri="https://www.reddit.com/r/myntcurrency/"  RequestNavigate="Hyperlink_OnRequestNavigate">https://www.reddit.com/r/myntcurrency/</Hyperlink>
+            </TextBlock>
+            <TextBlock Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" >
+                <Hyperlink NavigateUri="https://discord.gg/s5vdD7M"  RequestNavigate="Hyperlink_OnRequestNavigate">https://discord.gg/s5vdD7M</Hyperlink>
+            </TextBlock>
+            <TextBlock Grid.Row="6" Grid.Column="1" VerticalAlignment="Center" >
+                <Hyperlink NavigateUri="https://bitbucket.com/myntcurrency/"  RequestNavigate="Hyperlink_OnRequestNavigate">https://bitbucket.com/myntcurrency/</Hyperlink>
+            </TextBlock>
+            <TextBlock Grid.Row="7" Grid.Column="1" VerticalAlignment="Center"  Text="DreadedZombie"/>
+            <TextBox Grid.Row="8" Grid.Column="1" IsReadOnly="True" Height="25"  BorderThickness="0" BorderBrush="{DynamicResource LightColor}" CaretBrush="{DynamicResource LightColor}" HorizontalAlignment="Left">MMQZ4YtLs46TpK6bJ8UvKehUAiBuhd9ZuF</TextBox>
+        </Grid>
+    </Grid>
+</Window>

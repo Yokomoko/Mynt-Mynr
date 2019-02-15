@@ -1,0 +1,20 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                    xmlns:tb="http://www.hardcodet.net/taskbar" 
+                    mc:Ignorable="d">
+    <!--#region Converters and Other Resources-->
+    <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    <!--#endregion-->
+    <!--#region Common Colours-->
+    <!--#region Notes-->
+    <!--A Find/Replace on these colours should change the colour scheme of the majority of the application bar a few minor cases (Known ones stated below)-->
+    <!--     Menu/MenuItem uses a slightly different colour to the ones stated below-->
+    <!--     DataGridHeader may use slightly different colours to the ones stated below-->
+    <!--     A few places like on the button spinner use their own colours but these are relatively generic and should work OK after changing the below colours-->
+    <!--#endregion-->
+
+
+
+</ResourceDictionary>
