@@ -17,14 +17,12 @@ using Clipboard = System.Windows.Clipboard;
 using MessageBox = System.Windows.MessageBox;
 using MouseEventArgs = System.Windows.Input.MouseEventArgs;
 
-namespace Mynt_Mynr
-{
+namespace Mynt_Mynr {
 
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow
-    {
+    public partial class MainWindow {
 
         #region Public Fields
 
@@ -43,8 +41,7 @@ namespace Mynt_Mynr
 
         #region Public Constructors
 
-        public MainWindow()
-        {
+        public MainWindow() {
             InitializeComponent();
             UxIntensityPopupText.Text = "Select lower values if you still want to use your PC.\nRaise the intensity if you are idle. (GPU Only). Values above 20 may be unstable.\nSelect 'Auto' for the miner to auto-select the best intensity.";
 
@@ -72,25 +69,20 @@ namespace Mynt_Mynr
 
         #region Protected Methods
 
-        protected virtual void OnCpuMinerClosed(EventArgs e)
-        {
-            if (CpuMinerClosed != null)
-            {
+        protected virtual void OnCpuMinerClosed(EventArgs e) {
+            if (CpuMinerClosed != null) {
                 MiningOperations.CpuStarted = false;
             }
             if (MiningOperations.CpuStarted || MiningOperations.GpuStarted) return;
-            if (_minerStarted)
-            {
+            if (_minerStarted) {
                 BtnStart_OnClick(null, null);
             }
         }
 
-        protected virtual void OnGpuMinerClosed(EventArgs e)
-        {
+        protected virtual void OnGpuMinerClosed(EventArgs e) {
             MiningOperations.GpuStarted = false;
             if (MiningOperations.CpuStarted || MiningOperations.GpuStarted) return;
-            if (_minerStarted)
-            {
+            if (_minerStarted) {
                 BtnStart_OnClick(null, null);
             }
         }
@@ -99,14 +91,11 @@ namespace Mynt_Mynr
 
         #region Private Methods
 
-        private void BtnStart_OnClick(object sender, RoutedEventArgs e)
-        {
+        private void BtnStart_OnClick(object sender, RoutedEventArgs e) {
             _minerStarted = !_minerStarted;
-            if (_minerStarted)
-            {
+            if (_minerStarted) {
                 List<string> errors;
-                if (!ValidateSettings(out errors))
-                {
+                if (!ValidateSettings(out errors)) {
                     MessageBox.Show(this,
                         $"Unable to start miner, please rectify the following issues and try again:{Environment.NewLine + string.Join(Environment.NewLine, errors)} ");
                     return;
@@ -134,25 +123,21 @@ namespace Mynt_Mynr
                 UxAdvancedSettings.IsExpanded = false;
                 UxLogsExpander.IsExpanded = true;
 
-                if (UxCpuTgl.IsChecked == true)
-                {
+                if (UxCpuTgl.IsChecked == true) {
                     _cpuBg.RunWorkerAsync();
                     uxCpuMiningLogGroup.Visibility = Visibility.Visible;
                 }
-                if (uxnAMDRb.IsChecked == true)
-                {
+                if (uxnAMDRb.IsChecked == true) {
                     _amdBg.RunWorkerAsync();
                     uxGpuMiningLog.Visibility = Visibility.Visible;
                 }
-                if (uxnVidiaRb.IsChecked == true)
-                {
+                if (uxnVidiaRb.IsChecked == true) {
                     _nVidiaBg.RunWorkerAsync();
                     uxGpuMiningLog.Visibility = Visibility.Visible;
                 }
                 ProgressBar.IsIndeterminate = true;
             }
-            else
-            {
+            else {
                 BtnStart.Content = "Start Mining";
 
                 KillProcesses();
@@ -175,34 +160,24 @@ namespace Mynt_Mynr
             }
         }
 
-        private void KillProcesses()
-        {
+        private void KillProcesses() {
             var processes = Process.GetProcessesByName("minerd");
-            foreach (var process in processes)
-            {
+            foreach (var process in processes) {
                 process.Kill();
             }
-            processes = Process.GetProcessesByName("ccminer");
-            foreach (var process in processes)
-            {
-                process.Kill();
-            }
-            processes = Process.GetProcessesByName("sgminer");
-            foreach (var process in processes)
-            {
+            processes = Process.GetProcessesByName("wildrig");
+            foreach (var process in processes) {
                 process.Kill();
             }
         }
 
-        private void OnAmdBgOnDoWork(object sender, DoWorkEventArgs args)
-        {
-            if (_amdBg.CancellationPending)
-            {
+        private void OnAmdBgOnDoWork(object sender, DoWorkEventArgs args) {
+            if (_amdBg.CancellationPending) {
                 args.Cancel = true;
                 return;
             }
-            #region Surrounding the Directory Path in Quotes
-            var path = MiningOperations.AMDDirectory;
+            #region Surround with quotes
+            var path = MiningOperations.NVididiaDirectory;
             var folderNames = path.Split('\\');
 
             folderNames = folderNames.Select(fn => (fn.Contains(' ')) ? $"\"{fn}\"" : fn)
@@ -211,32 +186,32 @@ namespace Mynt_Mynr
 
             var fullPathWithQuotes = string.Join("\\", folderNames);
 
-            using (var process = new Process())
-            {
-                var commands = MiningOperations.GetAMDCommandLine(MiningOperations.CommonMiningPoolVariables, MiningOperations.UseAutoIntensity, MiningOperations.MiningIntensity.ToString(), "x16");
+            var commands = MiningOperations.GetGpuCommandLine(MiningOperations.CommonMiningPoolVariables, false, string.Empty);
 
-                ProcessStartInfo info = new ProcessStartInfo
-                {
+            using (var process = new Process()) {
+                ProcessStartInfo info = new ProcessStartInfo {
                     FileName = "cmd.exe",
-                    Arguments = $"/C {fullPathWithQuotes} -g 4 -w 64 -k x16s {commands}",
+                    Arguments = "/C " + "\"" + fullPathWithQuotes + "\"" + $" {commands}",
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
                     CreateNoWindow = true,
                     UseShellExecute = false
                 };
                 process.StartInfo = info;
-                process.EnableRaisingEvents = true;
-                process.ErrorDataReceived += (o, eventArgs) =>
-                {
-                    try
-                    {
-                        Dispatcher.Invoke(() =>
-                        {
-                            var lines = uxGpuLog.Text.Split(new[] { Environment.NewLine }, StringSplitOptions.None)
-                                .ToList();
 
-                            if (lines.Count() == 30)
-                            {
+                if (Debugger.IsAttached) {
+                    Dispatcher.Invoke(() => {
+                        MessageBox.Show(info.FileName + " " + info.Arguments);
+                    });
+                }
+
+                process.EnableRaisingEvents = true;
+                process.OutputDataReceived += (o, eventArgs) => {
+                    try {
+                        Dispatcher.Invoke(() => {
+                            var lines = uxGpuLog.Text.Split(new[] { Environment.NewLine }, StringSplitOptions.None).ToList();
+
+                            if (lines.Count() == 30) {
                                 lines.RemoveAt(0);
                             }
                             lines.Add(eventArgs.Data);
@@ -245,37 +220,34 @@ namespace Mynt_Mynr
                             uxGpuScroller.ScrollToVerticalOffset(uxGpuScroller.ExtentHeight);
                         });
                     }
-                    catch (Exception ex)
-                    {
+                    catch (Exception ex) {
                         MessageBox.Show("Error " + ex.Message + Environment.NewLine + Environment.NewLine + ex.StackTrace);
                     }
                 };
-
-
                 process.Start();
                 MiningOperations.GpuStarted = true;
                 process.BeginOutputReadLine();
                 process.BeginErrorReadLine();
                 process.WaitForExit();
-                Dispatcher.Invoke(() => OnGpuMinerClosed(new EventArgs()));
+                try {
+                    Dispatcher.Invoke(() => OnGpuMinerClosed(new EventArgs()));
+                }
+                catch (Exception ex) {
+                    MessageBox.Show("Error " + ex.Message + Environment.NewLine + Environment.NewLine + ex.StackTrace);
+                }
             }
         }
 
-        private void OnCpuBgOnDoWork(object sender, DoWorkEventArgs args)
-        {
-            if (_cpuBg.CancellationPending)
-            {
+        private void OnCpuBgOnDoWork(object sender, DoWorkEventArgs args) {
+            if (_cpuBg.CancellationPending) {
                 args.Cancel = true;
                 return;
             }
-            if (File.Exists(MiningOperations.CpuDirectory))
-            {
+            if (File.Exists(MiningOperations.CpuDirectory)) {
                 var commands = MiningOperations.GetCPUCommandLine(MiningOperations.CommonMiningPoolVariables);
 
-                using (var process = new Process())
-                {
-                    ProcessStartInfo info = new ProcessStartInfo
-                    {
+                using (var process = new Process()) {
+                    ProcessStartInfo info = new ProcessStartInfo {
                         FileName = "cmd.exe",
                         Arguments = "/C " + "\"" + MiningOperations.CpuDirectory + "\"" + $" -a x16s {commands}",
                         RedirectStandardOutput = true,
@@ -285,17 +257,13 @@ namespace Mynt_Mynr
                     };
                     process.StartInfo = info;
                     process.EnableRaisingEvents = true;
-                    process.OutputDataReceived += (o, eventArgs) =>
-                    {
-                        try
-                        {
-                            Dispatcher.Invoke(() =>
-                            {
+                    process.OutputDataReceived += (o, eventArgs) => {
+                        try {
+                            Dispatcher.Invoke(() => {
                                 var lines = uxCpuLog.Text.Split(new[] { Environment.NewLine }, StringSplitOptions.None)
                                     .ToList();
 
-                                if (lines.Count() == 30)
-                                {
+                                if (lines.Count() == 30) {
                                     lines.RemoveAt(0);
                                 }
                                 lines.Add(eventArgs.Data);
@@ -304,8 +272,7 @@ namespace Mynt_Mynr
                                 uxCpuScroller.ScrollToVerticalOffset(uxGpuScroller.ExtentHeight);
                             });
                         }
-                        catch (Exception ex)
-                        {
+                        catch (Exception ex) {
                             MessageBox.Show("Error " + ex.Message + Environment.NewLine + Environment.NewLine + ex.StackTrace);
                         }
                     };
@@ -316,32 +283,35 @@ namespace Mynt_Mynr
                     Dispatcher.Invoke(() => OnCpuMinerClosed(new EventArgs()));
                 }
             }
-            else
-            {
-                Dispatcher.Invoke(() =>
-                {
+            else {
+                Dispatcher.Invoke(() => {
                     MessageBox.Show("minerd.exe file not found. Please check your antivirus settings, re-run the installer and select repair");
                     OnCpuMinerClosed(new EventArgs());
                 });
             }
         }
 
-        private void OnNVidiaBgOnDoWork(object sender, DoWorkEventArgs args)
-        {
-            if (_nVidiaBg.CancellationPending)
-            {
+        private void OnNVidiaBgOnDoWork(object sender, DoWorkEventArgs args) {
+            if (_nVidiaBg.CancellationPending) {
                 args.Cancel = true;
                 return;
             }
+            #region Surround with quotes
+            var path = MiningOperations.NVididiaDirectory;
+            var folderNames = path.Split('\\');
 
-            var commands = MiningOperations.GetNVidiaCommandLine(MiningOperations.CommonMiningPoolVariables, MiningOperations.UseAutoIntensity, MiningOperations.MiningIntensity.ToString());
+            folderNames = folderNames.Select(fn => (fn.Contains(' ')) ? $"\"{fn}\"" : fn)
+                .ToArray();
+            #endregion
 
-            using (var process = new Process())
-            {
-                ProcessStartInfo info = new ProcessStartInfo
-                {
+            var fullPathWithQuotes = string.Join("\\", folderNames);
+
+            var commands = MiningOperations.GetGpuCommandLine(MiningOperations.CommonMiningPoolVariables, false, string.Empty);
+
+            using (var process = new Process()) {
+                ProcessStartInfo info = new ProcessStartInfo {
                     FileName = "cmd.exe",
-                    Arguments = "/C " + "\"" + MiningOperations.NVididiaDirectory + "\"" + $" -a x16s {commands}",
+                    Arguments = "/C " + "\"" + fullPathWithQuotes + "\"" + $" {commands}",
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
                     CreateNoWindow = true,
@@ -349,25 +319,19 @@ namespace Mynt_Mynr
                 };
                 process.StartInfo = info;
 
-                if (Debugger.IsAttached)
-                {
-                    Dispatcher.Invoke(() =>
-                    {
+                if (Debugger.IsAttached) {
+                    Dispatcher.Invoke(() => {
                         MessageBox.Show(info.FileName + " " + info.Arguments);
                     });
                 }
 
                 process.EnableRaisingEvents = true;
-                process.OutputDataReceived += (o, eventArgs) =>
-                {
-                    try
-                    {
-                        Dispatcher.Invoke(() =>
-                        {
+                process.OutputDataReceived += (o, eventArgs) => {
+                    try {
+                        Dispatcher.Invoke(() => {
                             var lines = uxGpuLog.Text.Split(new[] { Environment.NewLine }, StringSplitOptions.None).ToList();
 
-                            if (lines.Count() == 30)
-                            {
+                            if (lines.Count() == 30) {
                                 lines.RemoveAt(0);
                             }
                             lines.Add(eventArgs.Data);
@@ -376,8 +340,7 @@ namespace Mynt_Mynr
                             uxGpuScroller.ScrollToVerticalOffset(uxGpuScroller.ExtentHeight);
                         });
                     }
-                    catch (Exception ex)
-                    {
+                    catch (Exception ex) {
                         MessageBox.Show("Error " + ex.Message + Environment.NewLine + Environment.NewLine + ex.StackTrace);
                     }
                 };
@@ -386,21 +349,17 @@ namespace Mynt_Mynr
                 process.BeginOutputReadLine();
                 process.BeginErrorReadLine();
                 process.WaitForExit();
-                try
-                {
+                try {
                     Dispatcher.Invoke(() => OnGpuMinerClosed(new EventArgs()));
                 }
-                catch (Exception ex)
-                {
+                catch (Exception ex) {
                     MessageBox.Show("Error " + ex.Message + Environment.NewLine + Environment.NewLine + ex.StackTrace);
                 }
             }
         }
 
-        private void PopulatePage()
-        {
-            if (Debugger.IsAttached)
-            {
+        private void PopulatePage() {
+            if (Debugger.IsAttached) {
                 Settings.Default.P2PoolSettings = null;
                 Settings.Default.CustomSettings = null;
                 Settings.Default.MiningPoolHubSettings = null;
@@ -420,13 +379,11 @@ namespace Mynt_Mynr
             uxnAMDRb.IsChecked = (MiningOperations.GpuMiningSettings)Settings.Default.GPUMining == MiningOperations.GpuMiningSettings.Amd;
 
 
-            if (uxAutoIntensityChk.IsChecked == true)
-            {
+            if (uxAutoIntensityChk.IsChecked == true) {
                 UxIntensityTxt.Visibility = Visibility.Collapsed;
                 uxIntervalSlider.Visibility = Visibility.Collapsed;
             }
-            else
-            {
+            else {
                 UxIntensityTxt.Visibility = Visibility.Visible;
                 uxIntervalSlider.Visibility = Visibility.Visible;
             }
@@ -438,8 +395,7 @@ namespace Mynt_Mynr
             //        MiningOperations.GetPasswordForPool(MiningOperations.MiningPools.P2Pool)
             //        };
             //}
-            if (Settings.Default.CustomSettings == null)
-            {
+            if (Settings.Default.CustomSettings == null) {
                 Settings.Default.CustomSettings = new StringCollection {
                     MiningOperations.GetAddressForPool(MiningOperations.MiningPools.Custom),
                     MiningOperations.GetUsernameForPool(MiningOperations.MiningPools.Custom),
@@ -453,33 +409,28 @@ namespace Mynt_Mynr
             //        MiningOperations.GetPasswordForPool(MiningOperations.MiningPools.MiningPoolHub)
             //     };
             //}
-            if (Settings.Default.Pool2Settings == null)
-            {
+            if (Settings.Default.Pool2Settings == null) {
                 Settings.Default.Pool2Settings = new StringCollection {
-                    MiningOperations.GetAddressForPool(MiningOperations.MiningPools.Mynt2),
-                    MiningOperations.GetUsernameForPool(MiningOperations.MiningPools.Mynt2),
-                    MiningOperations.GetPasswordForPool(MiningOperations.MiningPools.Mynt2)
+                    MiningOperations.GetAddressForPool(MiningOperations.MiningPools.MeCrypto),
+                    MiningOperations.GetUsernameForPool(MiningOperations.MiningPools.MeCrypto),
+                    MiningOperations.GetPasswordForPool(MiningOperations.MiningPools.MeCrypto)
                 };
             }
             Settings.Default.Save();
         }
 
-        private void RangeBase_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            if (UxIntensityTxt != null)
-            {
+        private void RangeBase_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) {
+            if (UxIntensityTxt != null) {
                 UxIntensityTxt.Text = e.NewValue.ToString(CultureInfo.InvariantCulture);
             }
         }
 
-        private void SaveSettings()
-        {
+        private void SaveSettings() {
             Settings.Default.GrsWalletAddress = TxtUsername.Text;
             Settings.Default.SelectedMiningPool = (byte)uxPoolSelectorDdl.SelectedIndex;
 
-            switch ((MiningOperations.MiningPools)uxPoolSelectorDdl.SelectedIndex)
-            {
-                case MiningOperations.MiningPools.Mynt1:
+            switch ((MiningOperations.MiningPools)uxPoolSelectorDdl.SelectedIndex) {
+                case MiningOperations.MiningPools.LetsHashIt:
                     Settings.Default.MiningPoolUsername = TxtUsername.Text;
                     Settings.Default.MiningPoolPassword = TxtPassword.Text;
                     break;
@@ -487,7 +438,7 @@ namespace Mynt_Mynr
                 //    Settings.Default.MiningPoolHubSettings[0] = TxtUsername.Text;
                 //    Settings.Default.MiningPoolHubSettings[1] = TxtPassword.Text;
                 //    break;
-                case MiningOperations.MiningPools.Mynt2:
+                case MiningOperations.MiningPools.MeCrypto:
                     Settings.Default.Pool2Settings[0] = TxtUsername.Text;
                     Settings.Default.Pool2Settings[1] = TxtPassword.Text;
                     break;
@@ -506,180 +457,143 @@ namespace Mynt_Mynr
             Settings.Default.CPUMining = UxCpuTgl.IsChecked == true;
             Settings.Default.UseAutoIntensity = uxAutoIntensityChk.IsChecked == true;
 
-            if (uxnVidiaRb.IsChecked == true)
-            {
+            if (uxnVidiaRb.IsChecked == true) {
                 Settings.Default.GPUMining = (byte)MiningOperations.GpuMiningSettings.NVidia;
             }
-            else if (uxnAMDRb.IsChecked == true)
-            {
+            else if (uxnAMDRb.IsChecked == true) {
                 Settings.Default.GPUMining = (byte)MiningOperations.GpuMiningSettings.Amd;
             }
-            else
-            {
+            else {
                 Settings.Default.GPUMining = (byte)MiningOperations.GpuMiningSettings.None;
             }
             Settings.Default.Save();
         }
 
-        private void UIElement_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
+        private void UIElement_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
             this?.DragMove();
         }
 
-        private void Rectangle_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
+        private void Rectangle_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
             this?.DragMove();
         }
 
-        private void UxAdvancedSettings_OnExpanded(object sender, RoutedEventArgs e)
-        {
+        private void UxAdvancedSettings_OnExpanded(object sender, RoutedEventArgs e) {
             UxLogsExpander.IsExpanded = false;
             UxStandardSettings.IsExpanded = false;
         }
 
-        private void UxAmdRb_OnChecked(object sender, RoutedEventArgs e)
-        {
+        private void UxAmdRb_OnChecked(object sender, RoutedEventArgs e) {
             uxnVidiaRb.Checked -= UxnVidiaRb_OnChecked;
             uxnVidiaRb.IsChecked = false;
             uxnVidiaRb.Checked += UxnVidiaRb_OnChecked;
         }
 
-        private void UxnAMDRb_OnUnchecked(object sender, RoutedEventArgs e)
-        {
+        private void UxnAMDRb_OnUnchecked(object sender, RoutedEventArgs e) {
         }
 
-        private void UxnVidiaRb_OnChecked(object sender, RoutedEventArgs e)
-        {
+        private void UxnVidiaRb_OnChecked(object sender, RoutedEventArgs e) {
             uxnAMDRb.Checked -= UxAmdRb_OnChecked;
             uxnAMDRb.IsChecked = false;
             uxnAMDRb.Checked += UxAmdRb_OnChecked;
         }
 
-        private void UxAutoIntensityChk_OnChecked(object sender, RoutedEventArgs e)
-        {
+        private void UxAutoIntensityChk_OnChecked(object sender, RoutedEventArgs e) {
             uxIntervalSlider.Visibility = Visibility.Collapsed;
             UxIntensityTxt.Visibility = Visibility.Collapsed;
         }
 
-        private void UxAutoIntensityChk_OnUnchecked(object sender, RoutedEventArgs e)
-        {
+        private void UxAutoIntensityChk_OnUnchecked(object sender, RoutedEventArgs e) {
             UxIntensityTxt.Visibility = Visibility.Visible;
             uxIntervalSlider.Visibility = Visibility.Visible;
         }
 
-        private void UxCpuLog_OnMouseRightButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            try
-            {
+        private void UxCpuLog_OnMouseRightButtonDown(object sender, MouseButtonEventArgs e) {
+            try {
                 Clipboard.SetText(uxCpuLog.Text);
                 MessageBox.Show(this, "Copied to Clipboard");
             }
-            catch
-            {
+            catch {
             }
         }
 
-        private void UxGetWalletAddressTxt_Click(object sender, RoutedEventArgs e)
-        {
-            if (!MiningOperations.WalletFileExists)
-            {
-                StartingGuide guide = new StartingGuide
-                {
+        private void UxGetWalletAddressTxt_Click(object sender, RoutedEventArgs e) {
+            if (!MiningOperations.WalletFileExists) {
+                StartingGuide guide = new StartingGuide {
                     WindowStartupLocation = WindowStartupLocation.CenterOwner,
                     Owner = this,
                 };
                 guide.FromMainWindow = true;
                 guide.ShowDialog();
             }
-            else
-            {
+            else {
                 //if (TxtAddress.Text == MiningOperations.GetAddress()) return;
                 var messageBoxResult = MessageBox.Show(this, "Warning: Resetting your mining address will reset your rewards. Are you sure?", "Address Warning", MessageBoxButton.YesNo);
-                if (messageBoxResult == MessageBoxResult.Yes)
-                {
+                if (messageBoxResult == MessageBoxResult.Yes) {
                     //TxtAddress.Text = MiningOperations.GetAddress();
                 }
             }
         }
 
-        private void UxGpuLog_OnMouseRightButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            try
-            {
+        private void UxGpuLog_OnMouseRightButtonDown(object sender, MouseButtonEventArgs e) {
+            try {
                 Clipboard.SetText(uxGpuLog.Text);
                 MessageBox.Show(this, "Copied to Clipboard");
             }
-            catch
-            {
+            catch {
             }
         }
 
-        private void UxIntensityHelp_OnMouseEnter(object sender, MouseEventArgs e)
-        {
+        private void UxIntensityHelp_OnMouseEnter(object sender, MouseEventArgs e) {
             UxIntensityPopup.IsOpen = true;
         }
 
-        private void UxIntensityHelp_OnMouseLeave(object sender, MouseEventArgs e)
-        {
+        private void UxIntensityHelp_OnMouseLeave(object sender, MouseEventArgs e) {
             UxIntensityPopup.IsOpen = false;
         }
 
-        private void UxIntensityTxt_OnPreviewTextInput(object sender, TextCompositionEventArgs e)
-        {
+        private void UxIntensityTxt_OnPreviewTextInput(object sender, TextCompositionEventArgs e) {
             Regex regex = new Regex("[^0-9]+");
             e.Handled = regex.IsMatch(e.Text);
         }
 
-        private void UxLogsExpander_OnExpanded(object sender, RoutedEventArgs e)
-        {
+        private void UxLogsExpander_OnExpanded(object sender, RoutedEventArgs e) {
             UxAdvancedSettings.IsExpanded = false;
         }
 
-        private void UxStandardSettings_OnExpanded(object sender, RoutedEventArgs e)
-        {
-            if (UxAdvancedSettings != null)
-            {
+        private void UxStandardSettings_OnExpanded(object sender, RoutedEventArgs e) {
+            if (UxAdvancedSettings != null) {
                 UxAdvancedSettings.IsExpanded = false;
             }
         }
 
 
-        private bool ValidateSettings(out List<string> errors)
-        {
+        private bool ValidateSettings(out List<string> errors) {
             errors = new List<string>();
 
-            if (string.IsNullOrEmpty(TxtUsername.Text))
-            {
+            if (string.IsNullOrEmpty(TxtUsername.Text)) {
                 errors.Add("Please specify a username/address before starting to mine.");
             }
-            if (string.IsNullOrEmpty(TxtPool.Text))
-            {
+            if (string.IsNullOrEmpty(TxtPool.Text)) {
                 errors.Add("Please specify a mining pool address.");
             }
-            if (string.IsNullOrEmpty(TxtUsername.Text))
-            {
+            if (string.IsNullOrEmpty(TxtUsername.Text)) {
                 errors.Add("Please specify a mining pool username.");
             }
-            if (string.IsNullOrEmpty(TxtPassword.Text))
-            {
+            if (string.IsNullOrEmpty(TxtPassword.Text)) {
                 errors.Add("Please specify a mining pool password.");
             }
-            if (uxnAMDRb.IsChecked == false && uxnVidiaRb.IsChecked == false && UxCpuTgl.IsChecked == false)
-            {
+            if (uxnAMDRb.IsChecked == false && uxnVidiaRb.IsChecked == false && UxCpuTgl.IsChecked == false) {
                 errors.Add("Please select what to mine with (CPU, AMD / nVidia)");
             }
             return !errors.Any();
         }
 
-        private void Window_Closing(object sender, CancelEventArgs e)
-        {
+        private void Window_Closing(object sender, CancelEventArgs e) {
             KillProcesses();
         }
 
-        private void UxPoolSelectorDdl_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (TxtUsername != null && TxtUsername != null && TxtPassword != null)
-            {
+        private void UxPoolSelectorDdl_OnSelectionChanged(object sender, SelectionChangedEventArgs e) {
+            if (TxtUsername != null && TxtUsername != null && TxtPassword != null) {
                 TxtPool.Text = MiningOperations.GetAddressForPool((MiningOperations.MiningPools)uxPoolSelectorDdl.SelectedIndex);
                 TxtUsername.Text = MiningOperations.GetUsernameForPool((MiningOperations.MiningPools)uxPoolSelectorDdl.SelectedIndex);
                 TxtPassword.Text = MiningOperations.GetPasswordForPool((MiningOperations.MiningPools)uxPoolSelectorDdl.SelectedIndex);
@@ -687,13 +601,11 @@ namespace Mynt_Mynr
             SetStatsURL();
         }
 
-        private void SetStatsURL()
-        {
+        private void SetStatsURL() {
 
         }
 
-        private void TxtPool_OnTextChanged(object sender, TextChangedEventArgs e)
-        {
+        private void TxtPool_OnTextChanged(object sender, TextChangedEventArgs e) {
             SetStatsURL();
         }
 

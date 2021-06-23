@@ -18,8 +18,8 @@ namespace Mynt_Mynr.Business_Logic {
         }
 
         public enum MiningPools {
-            Mynt1 = 0,
-            Mynt2 = 1,
+            LetsHashIt = 0,
+            MeCrypto = 1,
             //MiningPoolHub = 3,
             //P2Pool = 4,
             Custom = 2
@@ -33,8 +33,8 @@ namespace Mynt_Mynr.Business_Logic {
         public static string ExecutingDirectory => Directory.GetCurrentDirectory();
 
         public static string CpuDirectory => Path.Combine(ExecutingDirectory, @"Resources\Miners\CPU Miner\minerd.exe");
-        public static string AMDDirectory => Path.Combine(ExecutingDirectory, @"Resources\Miners\AMD Miner\sgminer.exe");
-        public static string NVididiaDirectory => Path.Combine(ExecutingDirectory, @"Resources\Miners\nVidia Miner\ccminer.exe");
+        public static string AMDDirectory => Path.Combine(ExecutingDirectory, @"Resources\Miners\wildrig.exe");
+        public static string NVididiaDirectory => Path.Combine(ExecutingDirectory, @"Resources\Miners\wildrig.exe");
 
         public static List<string> GpuModels {
             get {
@@ -82,15 +82,10 @@ namespace Mynt_Mynr.Business_Logic {
         public static string MiningPoolAddress {
             get {
                 switch (SelectedMiningPool) {
-                    case MiningPools.Mynt1:
-                        return GetAddressForPool(MiningPools.Mynt1);
-                    case MiningPools.Mynt2:
-                        return GetAddressForPool(MiningPools.Mynt2);
-                    //case MiningPools.MiningPoolHub:
-                    //    return GetAddressForPool(MiningPools.MiningPoolHub);
-                    //case MiningPools.P2Pool:
-                    //    return GetAddressForPool(MiningPools.P2Pool);
-                    case MiningPools.Custom:
+                    case MiningPools.LetsHashIt:
+                    case MiningPools.MeCrypto:
+                        return GetAddressForPool(SelectedMiningPool);
+                   case MiningPools.Custom:
                         return GetAddressForPool(MiningPools.Custom);
                 }
                 return "";
@@ -100,10 +95,10 @@ namespace Mynt_Mynr.Business_Logic {
         public static string MiningPoolUsername {
             get {
                 switch (SelectedMiningPool) {
-                    case MiningPools.Mynt1:
-                        return GetUsernameForPool(MiningPools.Mynt1);
-                    case MiningPools.Mynt2:
-                        return GetUsernameForPool(MiningPools.Mynt2);
+                    case MiningPools.LetsHashIt:
+                        return GetUsernameForPool(MiningPools.LetsHashIt);
+                    case MiningPools.MeCrypto:
+                        return GetUsernameForPool(MiningPools.MeCrypto);
                     //case MiningPools.MiningPoolHub:
                     //    return GetUsernameForPool(MiningPools.MiningPoolHub);
                     //case MiningPools.P2Pool:
@@ -118,10 +113,10 @@ namespace Mynt_Mynr.Business_Logic {
         public static string MiningPoolPassword {
             get {
                 switch (SelectedMiningPool) {
-                    case MiningPools.Mynt1:
-                        return GetPasswordForPool(MiningPools.Mynt1);
-                    case MiningPools.Mynt2:
-                        return GetPasswordForPool(MiningPools.Mynt2);
+                    case MiningPools.LetsHashIt:
+                        return GetPasswordForPool(MiningPools.LetsHashIt);
+                    case MiningPools.MeCrypto:
+                        return GetPasswordForPool(MiningPools.MeCrypto);
                     case MiningPools.Custom:
                         return GetPasswordForPool(MiningPools.Custom);
                 }
@@ -139,10 +134,10 @@ namespace Mynt_Mynr.Business_Logic {
 
         public static string GetAddressForPool(MiningPools pool) {
             switch (pool) {
-                case MiningPools.Mynt1:
-                    return "pool.myntcurrency.org:3032";
-                case MiningPools.Mynt2:
-                    return "pool2.myntcurrency.org:3032";
+                case MiningPools.LetsHashIt:
+                    return "eu.letshash.it:3663";
+                case MiningPools.MeCrypto:
+                    return "eu.mecrypto.club:4874";
                 //case MiningPools.MiningPoolHub:
                 //    return Settings.Default.MiningPoolHubSettings == null ? "hub.miningpoolhub.com:12004" : Settings.Default.MiningPoolHubSettings[0];
                 //case MiningPools.P2Pool:
@@ -156,8 +151,8 @@ namespace Mynt_Mynr.Business_Logic {
 
         public static string GetUsernameForPool(MiningPools pool) {
             switch (pool) {
-                case MiningPools.Mynt1:
-                case MiningPools.Mynt2:
+                case MiningPools.LetsHashIt:
+                case MiningPools.MeCrypto:
                     return WalletAddress;
                 //case MiningPools.MiningPoolHub:
                 //    return WalletAddress;
@@ -173,10 +168,10 @@ namespace Mynt_Mynr.Business_Logic {
 
         public static string GetPasswordForPool(MiningPools pool) {
             switch (pool) {
-                case MiningPools.Mynt1:
+                case MiningPools.LetsHashIt:
                     //return "x";
                     return Settings.Default.Pool2Settings == null ? "x" : Settings.Default.Pool2Settings[2];
-                case MiningPools.Mynt2:
+                case MiningPools.MeCrypto:
                     return Settings.Default.Pool2Settings == null ? "x" : Settings.Default.Pool2Settings[2];
                 //case MiningPools.MiningPoolHub:
                 //    return Settings.Default.MiningPoolHubSettings == null ? "x" : Settings.Default.MiningPoolHubSettings[2];
@@ -196,91 +191,11 @@ namespace Mynt_Mynr.Business_Logic {
             return $"{arguments}";
         }
 
-        public static string GetNVidiaCommandLine(PublicMiningArgs arguments, bool useAutoIntensity, string intensity) {
+        public static string GetGpuCommandLine(PublicMiningArgs arguments, bool useAutoIntensity, string intensity) {
             var sb = new StringBuilder();
-            //if (SelectedMiningPool == MiningPools.P2Pool) {
-            //    sb.Append("--submit-stale");
-            //}
-            var intensityArgs = useAutoIntensity ? string.Empty : $" -i {intensity}";
-            sb.Append(intensityArgs);
-            sb.Append(arguments);
-
+            sb.Append(arguments.WildRigArguments());
             return sb.ToString();
         }
-
-        public static string GetAMDCommandLine(PublicMiningArgs arguments, bool useAutoIntensity, string intensity, string kernal = "") {
-            var sb = new StringBuilder();
-            //sb.Append(SelectedMiningPool != MiningPools.P2Pool ? " --no-submit-stale" : "");
-
-            var intensityInt = int.Parse(intensity);
-
-            var intensityArgs = useAutoIntensity ? string.Empty : $" -X {intensityInt * 64} ";
-
-            sb.Append(arguments);
-            sb.Append(intensityArgs);
-            sb.Append("--text-only ");
-
-            if (!string.IsNullOrEmpty(kernal)) {
-                sb.Append($" --kernelfile {kernal}");
-            }
-
-            return sb.ToString();
-        }
-
-
-        /*public static string GetAddress() {
-            try {
-                //Get the pubkey
-                var pubkey = String.Empty;
-                //If electrum default wallet exists, read the file. 
-                if (File.Exists(WalletFolder)) {
-                    using (StreamReader r = new StreamReader(WalletFolder)) {
-                        string json = r.ReadToEnd();
-                        //Deserialize the json string to a dynamic array.
-                        dynamic array = JsonConvert.DeserializeObject(json);
-                        foreach (var item in array) {
-                            //Deserialise the inner json string to get the receiving addresses
-                            dynamic line = JsonConvert.DeserializeObject(item.Value.ToString());
-                            foreach (var item2 in line) {
-                                //Get the first address and break from loop
-                                pubkey = item2.Value.receiving.First;
-                                break;
-                            }
-                            break;
-                        }
-                    }
-                }
-                //If it didn't manage to get any public key, give up..
-                if (String.IsNullOrEmpty(pubkey)) return String.Empty;
-
-                //Get coin util directory
-                var coinUtilLocation = $@"{Directory.GetCurrentDirectory()}\Resources\coin-util.exe";
-
-                //if CoinUtil file doesn't exist (AV?) then give up..
-                if (!File.Exists(coinUtilLocation)) return String.Empty;
-
-                //Fire up coin util to get the public key. Return the output.
-                using (var process = new Process()) {
-                    ProcessStartInfo info = new ProcessStartInfo {
-                        FileName = @"cmd.exe",
-                        Arguments = $@"/C " + "\"" + coinUtilLocation + "\"" + $" -a GRS pubkey-to-addr {pubkey}",
-                        RedirectStandardOutput = true,
-                        UseShellExecute = false,
-                        CreateNoWindow = true,
-                    };
-                    process.StartInfo = info;
-                    process.EnableRaisingEvents = true;
-                    process.Start();
-                    var address = process.StandardOutput.ReadToEnd();
-                    process.WaitForExit();
-                    return address;
-                }
-            }
-            catch {
-                return string.Empty;
-            }
-        }*/
-
 
         public class PublicMiningArgs {
             public string PoolAddress;
@@ -295,6 +210,10 @@ namespace Mynt_Mynr.Business_Logic {
 
             public override string ToString() {
                 return $" -o stratum+tcp://{PoolAddress.ToLower().Replace("stratum+tcp://", "").Trim()} -u {PoolUsername.Trim()} -p {PoolPassword.Trim()} ";
+            }
+
+            public string WildRigArguments() {
+                return $"--print-full -a x16s -o stratum+tcp://{PoolAddress.ToLower().Replace("stratum+tcp://", "").Trim()} -u {PoolUsername.Trim()} -p c=MYNT";
             }
         }
 
