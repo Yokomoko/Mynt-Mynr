@@ -83,6 +83,9 @@
                             <WrapPanel x:Name="WpCustom2">
                                 <TextBox Width="293" x:Name="TxtUsername" Text="MVT2AJDK7CYTtWo5fX9u48eQT5ynWPyFFd" materialDesign:HintAssist.Hint="Wallet Address" Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
                                 <TextBox Width="80" x:Name="TxtPassword"  Text="x" materialDesign:HintAssist.Hint="Password" Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+                                <TextBlock Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" Name="uxShowStatsText">
+                                    <Hyperlink Name="uxShowStats" RequestNavigate="Hyperlink_OnRequestNavigate">Show Stats</Hyperlink>
+                                </TextBlock>
                             </WrapPanel>
                         </StackPanel>
                     </GroupBox>

@@ -14,7 +14,7 @@
         WindowStyle="None"
         FontFamily="{DynamicResource MaterialDesignFont}" 
         Icon="/Resources/GRS-logo.ico"
-        Title="About" Height="300" Width="350" WindowStartupLocation="CenterScreen" MouseLeftButtonDown="About_OnMouseLeftButtonDown">
+        Title="About" Height="280" Width="350" WindowStartupLocation="CenterScreen" MouseLeftButtonDown="About_OnMouseLeftButtonDown">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -54,33 +54,29 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <Label Grid.Row="1" Style="{StaticResource LabelLight}" FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Right">Website:</Label>
-            <Label Grid.Row="2" Style="{StaticResource LabelLight}" FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Right">Facebook:</Label>
-            <Label Grid.Row="3" Style="{StaticResource LabelLight}" FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Right">Twitter:</Label>
-            <Label Grid.Row="4" Style="{StaticResource LabelLight}" FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Right">Reddit:</Label>
-            <Label Grid.Row="5" Style="{StaticResource LabelLight}" FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Right">Discord:</Label>
-            <Label Grid.Row="6" Style="{StaticResource LabelLight}" FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Right">Github:</Label>
-            <Label Grid.Row="7" Style="{StaticResource LabelLight}" FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Right">Developer:</Label>
-            <Label Grid.Row="8" Style="{StaticResource LabelLight}" FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Right">Donate:</Label>
+            <Label Grid.Row="2" Style="{StaticResource LabelLight}" FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Right">Twitter:</Label>
+            <Label Grid.Row="3" Style="{StaticResource LabelLight}" FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Right">Reddit:</Label>
+            <Label Grid.Row="4" Style="{StaticResource LabelLight}" FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Right">Discord:</Label>
+            <Label Grid.Row="5" Style="{StaticResource LabelLight}" FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Right">Github:</Label>
+            <Label Grid.Row="6" Style="{StaticResource LabelLight}" FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Right">Developer:</Label>
+            <Label Grid.Row="7" Style="{StaticResource LabelLight}" FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Right">Donate:</Label>
             <TextBlock Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" >
-                <Hyperlink NavigateUri="https://www.myntcurrency.org"  RequestNavigate="Hyperlink_OnRequestNavigate">https://www.myntcurrency.org</Hyperlink>
+                <Hyperlink NavigateUri="https://www.getmynt.io"  RequestNavigate="Hyperlink_OnRequestNavigate">https://www.getmynt.io</Hyperlink>
             </TextBlock>
             <TextBlock Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" >
-                <Hyperlink NavigateUri="https://www.facebook.com"  RequestNavigate="Hyperlink_OnRequestNavigate">Coming soon...</Hyperlink>
+                <Hyperlink NavigateUri="https://twitter.com/myntcurrency"  RequestNavigate="Hyperlink_OnRequestNavigate">https://twitter.com/mynt</Hyperlink>
             </TextBlock>
             <TextBlock Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" >
-                <Hyperlink NavigateUri="https://twitter.com/myntcurrency"  RequestNavigate="Hyperlink_OnRequestNavigate">https://twitter.com/myntcurrency</Hyperlink>
+                <Hyperlink NavigateUri="https://www.reddit.com/r/myntcurrency/"  RequestNavigate="Hyperlink_OnRequestNavigate">https://www.reddit.com/r/Mynt/</Hyperlink>
             </TextBlock>
             <TextBlock Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" >
-                <Hyperlink NavigateUri="https://www.reddit.com/r/myntcurrency/"  RequestNavigate="Hyperlink_OnRequestNavigate">https://www.reddit.com/r/myntcurrency/</Hyperlink>
+                <Hyperlink NavigateUri="https://discord.gg/xna8sjFBbF"  RequestNavigate="Hyperlink_OnRequestNavigate">https://discord.gg/xna8sjFBbF</Hyperlink>
             </TextBlock>
             <TextBlock Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" >
-                <Hyperlink NavigateUri="https://discord.gg/s5vdD7M"  RequestNavigate="Hyperlink_OnRequestNavigate">https://discord.gg/s5vdD7M</Hyperlink>
+                <Hyperlink NavigateUri="https://github.com/project-mynt"  RequestNavigate="Hyperlink_OnRequestNavigate">https://github.com/project-mynt</Hyperlink>
             </TextBlock>
-            <TextBlock Grid.Row="6" Grid.Column="1" VerticalAlignment="Center" >
-                <Hyperlink NavigateUri="https://bitbucket.com/myntcurrency/"  RequestNavigate="Hyperlink_OnRequestNavigate">https://bitbucket.com/myntcurrency/</Hyperlink>
-            </TextBlock>
-            <TextBlock Grid.Row="7" Grid.Column="1" VerticalAlignment="Center"  Text="DreadedZombie"/>
-            <TextBox Grid.Row="8" Grid.Column="1" IsReadOnly="True" Height="25"  BorderThickness="0" BorderBrush="{DynamicResource LightColor}" CaretBrush="{DynamicResource LightColor}" HorizontalAlignment="Left">MMQZ4YtLs46TpK6bJ8UvKehUAiBuhd9ZuF</TextBox>
+            <TextBlock Grid.Row="6" Grid.Column="1" VerticalAlignment="Center"  Text="Yokomoko and DreadedZombie"/>
+            <TextBox Grid.Row="7" Grid.Column="1" IsReadOnly="True" Height="25"  BorderThickness="0" BorderBrush="{DynamicResource LightColor}" CaretBrush="{DynamicResource LightColor}" HorizontalAlignment="Left">MVT2AJDK7CYTtWo5fX9u48eQT5ynWPyFFd</TextBox>
         </Grid>
     </Grid>
 </Window>

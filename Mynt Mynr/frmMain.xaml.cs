@@ -602,6 +602,25 @@ namespace Mynt_Mynr {
         }
 
         private void SetStatsURL() {
+            try {
+                switch ((MiningOperations.MiningPools)uxPoolSelectorDdl.SelectedIndex) {
+                    case MiningOperations.MiningPools.LetsHashIt:
+                        uxShowStatsText.Visibility = Visibility.Visible;
+                        uxShowStats.NavigateUri = new Uri("https://letshash.it/#/worker");
+                        break;
+                    case MiningOperations.MiningPools.MeCrypto:
+                        uxShowStatsText.Visibility = Visibility.Visible;
+                        uxShowStats.NavigateUri = new Uri($"https://mecrypto.club/?address={(MiningOperations.GetUsernameForPool(MiningOperations.MiningPools.MeCrypto))}");
+                        break;
+                    case MiningOperations.MiningPools.Custom:
+                        uxShowStatsText.Visibility = Visibility.Collapsed;
+                        uxShowStats.NavigateUri = new Uri("");
+                        break;
+                }
+            }
+            catch {
+                //Do Nothing
+            }
 
         }
 
@@ -609,8 +628,12 @@ namespace Mynt_Mynr {
             SetStatsURL();
         }
 
-        #endregion Private Methods
+        private void Hyperlink_OnRequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e) {
+            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
+            e.Handled = true;
+        }
 
+        #endregion Private Methods
 
 
     }
